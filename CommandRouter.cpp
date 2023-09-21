@@ -2,27 +2,35 @@
 
 std::string CommandLineInterpreter::execute(std::string args)
 {
+    std::string ret;
     bool use = false;
+    size_t first_delimitor = args.find_first_of(' ');
+    std::string command_name = args;
+    std::string new_args;
+    if (first_delimitor != std::string::npos)
+    {
+        command_name = args.substr(0, first_delimitor);
+        new_args = args.substr(first_delimitor + 1);
+    }
+
     for (size_t i = 0; i < this->commands.size(); i++)
     {
-        std::string com_name = this->commands.at(i)->getName();
-        if (args.size() >= com_name.size())
+        if (this->commands.at(i)->getName() == command_name)
         {
-            char deli = ',';
-            if (args.size() > com_name.size())
-                deli = args[com_name.size()];
-            if (com_name == args.substr(0, com_name.size()))
+            try
             {
-                if (args.size() == com_name.size() || (args.size() > com_name.size() && deli == ' '))
-                {
-                    std::string next_args = "";
-                    if (args.size() > com_name.size())
-                        next_args = args.substr(com_name.size() + 1);
-                    this->commands.at(i)->execute(next_args);
-                    use = true;
-                    break;
-                }
+                ret = this->commands.at(i)->execute(new_args);
             }
+            catch (std::exception e)
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());
+            }
+            catch (...)
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), "unknown");
+            }
+            use = true;
+            break;
         }
     }
     if (!use)

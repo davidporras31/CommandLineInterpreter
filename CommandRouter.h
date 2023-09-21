@@ -4,6 +4,7 @@
 
 #include "Command.h"
 #include "CommandNotFoundException.h"
+#include "CommandRuntimeException.h"
 
 class CommandLineInterpreter : public Command
 {

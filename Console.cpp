@@ -18,41 +18,36 @@ void Console::addBasicCommand(Console* console)
 }
 
 
-
 std::string Console::commandeExecute(std::string buffer)
 {
     std::string ret;
     bool use = false;
+    size_t first_delimitor = buffer.find_first_of(' ');
+    std::string command_name = buffer;
+    std::string args;
+    if (first_delimitor != std::string::npos)
+    {
+        command_name = buffer.substr(0, first_delimitor);
+        args = buffer.substr(first_delimitor + 1);
+    }
+
     for (size_t i = 0; i < this->commands.size(); i++)
     {
-        std::string com_name = this->commands.at(i)->getName();
-        if (buffer.size() >= com_name.size())
+        if( this->commands.at(i)->getName() == command_name)
         {
-            char deli = ',';
-            if (buffer.size() > com_name.size())
-                deli = buffer[com_name.size()];
-            if (com_name == buffer.substr(0, com_name.size()))
+            try 
             {
-                if (buffer.size() == com_name.size() || (buffer.size() > com_name.size() && deli == ' '))
-                {
-                    std::string args = "";
-                    if (buffer.size() > com_name.size())
-                        args = buffer.substr(com_name.size() + 1);
-                    try 
-                    {
-                        ret = this->commands.at(i)->execute(args);
-                    }catch(std::exception e)
-                    {
-                        throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());
-                    }
-                    catch (...) 
-                    {
-                        throw CommandRuntimeException(this->commands.at(i)->getName(), "unknown");
-                    }
-                    use = true;
-                    break;
-                }
+                ret = this->commands.at(i)->execute(args);
+            }catch(std::exception e)
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());
             }
+            catch (...) 
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), "unknown");
+            }
+            use = true;
+            break;
         }
     }
     if (!use)
@@ -64,7 +59,15 @@ std::string Console::commandeExecute(std::string buffer)
 
 std::string Console::autoCompleteCommand(std::string buffer)
 {
-    std::string ret;
+    std::string ret; 
+    for (size_t i = 0; i < this->commands.size(); i++)
+    {
+        if (this->commands.at(i)->getName().find_first_of(buffer) == 0u)
+        {
+            ret = this->commands.at(i)->getName();
+            break;
+        }
+    }
     return ret;
 }
 

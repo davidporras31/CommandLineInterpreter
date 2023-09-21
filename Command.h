@@ -18,6 +18,13 @@ public:
 	* \return the command name
 	*/
 	std::string getName();
+	/*
+	* \brief set the name command
+	* 
+	* set the name command but can be access one time
+	*
+	* \param name the command name
+	*/
 	void setName(std::string name);
 
 	/*
@@ -26,6 +33,13 @@ public:
 	* \return the help message
 	*/
 	std::string getHelp();
+	/*
+	* \brief set the help from command
+	*
+	* set the help from command but can be access one time
+	*
+	* \param help the command help
+	*/
 	void setHelp(std::string name);
 private:
 	std::string name, help;

@@ -38,6 +38,12 @@ std::string Console::commandeExecute(std::string buffer)
             try 
             {
                 ret = this->commands.at(i)->execute(args);
+            }catch(CommandNotFoundException e)
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());
+            }catch(CommandRuntimeException e)
+            {
+                throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());
             }catch(std::exception e)
             {
                 throw CommandRuntimeException(this->commands.at(i)->getName(), e.what());

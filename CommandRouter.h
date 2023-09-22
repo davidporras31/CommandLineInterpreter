@@ -6,11 +6,12 @@
 #include "CommandNotFoundException.h"
 #include "CommandRuntimeException.h"
 
-class CommandLineInterpreter : public Command
+class CommandRouter : public Command
 {
 public:
 	// Hérité via Command
 	virtual std::string execute(std::string args) override;
+	virtual std::string getHelp();
 
 	void add(Command* command);
 	std::vector<Command*>* getRoutes();

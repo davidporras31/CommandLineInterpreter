@@ -32,7 +32,7 @@ public:
 	* 
 	* \return the help message
 	*/
-	std::string getHelp();
+	virtual std::string getHelp();
 	/*
 	* \brief set the help from command
 	*

@@ -6,5 +6,5 @@ CommandNotFoundException::CommandNotFoundException(std::string message)
 }
 const char* CommandNotFoundException::what() const throw()
 {
-    return (new std::string("command " + message + " not found"))->c_str();
+    return (new std::string("command \"" + message + "\" not found"))->c_str();
 }

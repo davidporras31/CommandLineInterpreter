@@ -24,7 +24,7 @@ std::string Console::commandeExecute(std::string buffer)
     bool use = false;
     size_t first_delimitor = buffer.find_first_of(' ');
     std::string command_name = buffer;
-    std::string args;
+    std::string args = "";
     if (first_delimitor != std::string::npos)
     {
         command_name = buffer.substr(0, first_delimitor);
